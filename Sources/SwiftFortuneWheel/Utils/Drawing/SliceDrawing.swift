@@ -21,8 +21,8 @@ extension SliceDrawing {
     }
     
     /// Content margins
-    var margins: SwiftFortuneWheelConfiguration.Margins {
-        self.preferences?.contentMargins ?? SwiftFortuneWheelConfiguration.Margins()
+    var margins: SFWConfiguration.Margins {
+        self.preferences?.contentMargins ?? SFWConfiguration.Margins()
     }
     
     
@@ -69,27 +69,18 @@ extension SliceDrawing {
                                          rotation: rotation,
                                          index: index,
                                          topOffset: topOffset)
-            case .assetImage(let name, let preferences):
+            case .image(let name, let preferenes):
                 self.drawImage(in: context,
                                imageName: name,
-                               preferences: preferences,
+                               preferences: preferenes,
                                rotation: rotation,
                                index: index,
                                topOffset: topOffset,
                                radius: radius)
-                topOffset += preferences.preferredSize.height + preferences.verticalOffset
-            case .image(let image, let preferences):
-                self.drawImage(in: context,
-                               image: image,
-                               preferences: preferences,
-                               rotation: rotation,
-                               index: index,
-                               topOffset: topOffset,
-                               radius: radius)
-                topOffset += preferences.preferredSize.height + preferences.verticalOffset
-            case .line(let preferences):
+                topOffset += preferenes.preferredSize.height + preferenes.verticalOffset
+            case .line(let preferenes):
                 self.drawLine(in: context,
-                              preferences: preferences,
+                              preferences: preferenes,
                               start: start,
                               and: end,
                               rotation: rotation,
@@ -97,7 +88,7 @@ extension SliceDrawing {
                               topOffset: topOffset,
                               radius: radius,
                               contextPositionCorrectionOffsetDegree: contextPositionCorrectionOffsetDegree)
-                topOffset += preferences.height
+                topOffset += preferenes.height
             }
         }
         

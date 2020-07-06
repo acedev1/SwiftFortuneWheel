@@ -23,23 +23,8 @@ extension ImageDrawing {
     ///   - topOffset: top offset
     ///   - radius: radius
     func drawImage(in context: CGContext, imageName: String, preferences: ImagePreferences, rotation: CGFloat, index: Int, topOffset: CGFloat, radius: CGFloat) {
-        guard let image = UIImage(named: imageName, in: nil, compatibleWith: nil) else { return }
-        self.drawImage(in: context, image: image, preferences: preferences, rotation: rotation, index: index, topOffset: topOffset, radius: radius)
-    }
-    
-    
-    /// Draws image
-    /// - Parameters:
-    ///   - context: context where to draw
-    ///   - image: UIImage object which needs to be drawn in the context
-    ///   - preferences: image preferences
-    ///   - rotation: rotation degree
-    ///   - index: index
-    ///   - topOffset: top offset
-    ///   - radius: radius
-    func drawImage(in context: CGContext, image: UIImage, preferences: ImagePreferences, rotation: CGFloat, index: Int, topOffset: CGFloat, radius: CGFloat) {
-        
-        var image = image
+        guard var image = UIImage(named: imageName, in: nil, compatibleWith: nil) else { return }
+
         if let tintColor = preferences.tintColor {
             if #available(iOS 13.0, *) {
                 image = image.withTintColor(tintColor, renderingMode: .alwaysTemplate)
@@ -69,7 +54,6 @@ extension ImageDrawing {
             context.rotate(by: Calc.flipRotation)
         }
         context.restoreGState()
-        
     }
     
     
@@ -82,7 +66,7 @@ extension ImageDrawing {
     ///   - radius: radius
     ///   - sliceDegree: Slice degree
     ///   - rotationOffset: Rotation offset
-    func drawAnchorImage(in context: CGContext, imageAnchor: SwiftFortuneWheelConfiguration.AnchorImage, isCentered: Bool, rotation: CGFloat, index: Int, radius: CGFloat, sliceDegree: CGFloat, rotationOffset: CGFloat) {
+    func drawAnchorImage(in context: CGContext, imageAnchor: SFWConfiguration.AnchorImage, isCentered: Bool, rotation: CGFloat, index: Int, radius: CGFloat, sliceDegree: CGFloat, rotationOffset: CGFloat) {
 
         //// Context setup
         context.saveGState()

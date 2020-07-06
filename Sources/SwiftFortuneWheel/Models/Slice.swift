@@ -30,9 +30,8 @@ public struct Slice {
 extension Slice {
     /// Slice content type, currently image or text
     public enum ContentType {
-        case assetImage(name: String, preferences: ImagePreferences)
-        case image(image: UIImage, preferences: ImagePreferences)
-        case text(text: String, preferences: TextPreferences)
-        case line(preferences: LinePreferences)
+        case image(name: String, preferenes: ImagePreferences)
+        case text(text: String, preferenes: TextPreferences)
+        case line(preferenes: LinePreferences)
     }
 }
