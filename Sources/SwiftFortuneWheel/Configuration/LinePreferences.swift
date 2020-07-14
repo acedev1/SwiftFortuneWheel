@@ -6,12 +6,7 @@
 //
 
 import Foundation
-
-#if os(macOS)
-    import AppKit
-#else
-    import UIKit
-#endif
+import UIKit
 
 /// Line Preferences
 public struct LinePreferences {

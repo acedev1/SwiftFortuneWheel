@@ -8,10 +8,10 @@
 
 import Foundation
 
-#if os(macOS)
-    import Cocoa
-#else
+#if os(iOS)
     import UIKit
+#else
+    import Cocoa
 #endif
 
 public class TTUtils {

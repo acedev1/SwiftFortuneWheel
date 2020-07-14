@@ -7,12 +7,7 @@
 //
 
 import Foundation
-
-#if os(macOS)
-    import AppKit
-#else
-    import UIKit
-#endif
+import UIKit
 
 /// Image drawing protocol
 protocol ImageDrawing {}
@@ -33,7 +28,12 @@ extension ImageDrawing {
         
         var image = image
         if let tintColor = preferences.tintColor {
-            image = image.withTintColor(tintColor)
+            if #available(iOS 13.0, *) {
+                image = image.withTintColor(tintColor, renderingMode: .alwaysTemplate)
+            } else {
+                // Fallback on earlier versions
+                image = image.withColor(tintColor)
+            }
         }
 
         context.saveGState()
@@ -50,11 +50,7 @@ extension ImageDrawing {
             context.fill(rectangle)
         }
 
-        #if os(macOS)
-            image.draw(in: rectangle)
-        #else
-            image.draw(in: rectangle, blendMode: .normal, alpha: 1)
-        #endif
+        image.draw(in: rectangle, blendMode: .normal, alpha: 1)
 
         if preferences.flipUpsideDown {
             context.rotate(by: Calc.flipRotation)
@@ -80,13 +76,18 @@ extension ImageDrawing {
         // Coordinate now start from center
         context.translateBy(x: rotationOffset, y: rotationOffset)
 
-        guard var image = UIImage(named: imageAnchor.imageName) else {
+        guard var image = UIImage(named: imageAnchor.imageName, in: nil, compatibleWith: nil) else {
             context.restoreGState()
             return
         }
 
         if let tintColor = imageAnchor.tintColor {
-            image = image.withTintColor(tintColor)
+            if #available(iOS 13.0, *) {
+                image = image.withTintColor(tintColor, renderingMode: .alwaysTemplate)
+            } else {
+                // Fallback on earlier versions
+                image = image.withColor(tintColor)
+            }
         }
 
         let centeredOffset: CGFloat = isCentered ? sliceDegree / 2 : 0
@@ -99,12 +100,8 @@ extension ImageDrawing {
         let xPosition: CGFloat = imageAnchor.size.width / 2
 
         let rectangle = CGRect(x: -xPosition, y: -yPosition, width: imageAnchor.size.width, height: imageAnchor.size.height)
-        
-        #if os(macOS)
-            image.draw(in: rectangle)
-        #else
-            image.draw(in: rectangle, blendMode: .normal, alpha: 1)
-        #endif
+
+        image.draw(in: rectangle, blendMode: .normal, alpha: 1)
 
         context.restoreGState()
         context.restoreGState()

@@ -7,12 +7,7 @@
 //
 
 import Foundation
-
-#if os(macOS)
-    import AppKit
-#else
-    import UIKit
-#endif
+import UIKit
 
 /// Configuration, contains preferences to configure a fortune wheel
 public struct SFWConfiguration {
@@ -65,14 +60,6 @@ public extension SFWConfiguration {
 
         /// Image anchor for each slice, located at the center of wheel's border
         public var centerImageAnchor: AnchorImage?
-        
-        var layerInsetsWithCircleWidth: UIEdgeInsets {
-            let circleWidth = self.circlePreferences.strokeWidth
-            return UIEdgeInsets(top: layerInsets.top - circleWidth,
-                                left: layerInsets.left - circleWidth,
-                                bottom: layerInsets.bottom - circleWidth,
-                                right: layerInsets.right - circleWidth)
-        }
 
         /// Initiates a wheel preferences
         /// - Parameters:
@@ -217,20 +204,6 @@ public extension SFWConfiguration {
             self.textColor = textColor
             self.disabledTextColor = disabledTextColor
             self.font = font
-        }
-
-        /// Creates text attributes, relative to slice index position
-        /// - Parameter index: Slice index
-        /// - Returns: Text attributes
-        var textAttributes: [NSAttributedString.Key:Any] {
-            let textStyle = NSMutableParagraphStyle()
-            textStyle.alignment = .center
-            textStyle.lineBreakMode = .byWordWrapping
-            let deafultAttributes:[NSAttributedString.Key: Any] =
-                [.font: self.font,
-                 .foregroundColor: textColor,
-                 .paragraphStyle: textStyle ]
-            return deafultAttributes
         }
     }
 }

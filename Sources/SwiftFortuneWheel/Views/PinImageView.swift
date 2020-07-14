@@ -6,11 +6,7 @@
 // 
 //
 
-#if os(macOS)
-    import AppKit
-#else
-    import UIKit
-#endif
+import UIKit
 
 /// Pin or anchor image view, that usually represents an arrow to point in selected slice.
 class PinImageView: UIImageView {
@@ -22,10 +18,6 @@ class PinImageView: UIImageView {
         // Drawing code
     }
     */
-    
-    override func updateConstraints() {
-        super.updateConstraints()
-    }
 
 }
 

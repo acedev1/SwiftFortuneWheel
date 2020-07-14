@@ -7,13 +7,8 @@
 //
 
 import Foundation
+import UIKit
 import CoreGraphics
-
-#if os(macOS)
-    import AppKit
-#else
-    import UIKit
-#endif
 
 /// Slice drawing protocol
 protocol SliceDrawing: WheelMathCalculating, SliceCalculating, TextDrawing, ImageDrawing, ShapeDrawing {}
@@ -56,7 +51,7 @@ extension SliceDrawing {
         // Coordinate now start from center
         context.translateBy(x: rotationOffset, y: rotationOffset)
         
-//         Draws slice path and background
+        // Draws slice path and background
         self.drawPath(in: context,
                       backgroundColor: slice.backgroundColor,
                       start: start,
@@ -146,36 +141,24 @@ extension SliceDrawing {
         let strokeColor = preferences?.slicePreferences.strokeColor
         let strokeWidth = preferences?.slicePreferences.strokeWidth
         
-        let path = CGMutablePath()
+        let path = UIBezierPath()
         let center = CGPoint(x: 0, y: 0)
         path.move(to: center)
-        path.addArc(center: center, radius: radius, startAngle: Calc.torad(start), endAngle: Calc.torad(end), clockwise: false)
-        path.closeSubpath()
-        context.setFillColor(pathBackgroundColor!.cgColor)
-        context.addPath(path)
-        context.drawPath(using: .fill)
-        
-//        let path = UIBezierPath()
-//        let center = CGPoint(x: 0, y: 0)
-//        path.move(to: center)
-//        path.addArc(withCenter: center, radius: radius, startAngle: Calc.torad(start), endAngle: Calc.torad(end), clockwise: true)
-//        pathBackgroundColor?.setFill()
-//        path.fill()
+        path.addArc(withCenter: center, radius: radius, startAngle: Calc.torad(start), endAngle: Calc.torad(end), clockwise: true)
+        pathBackgroundColor?.setFill()
+        path.fill()
         
         if rotation != end {
-            let startPoint = CGPoint(x: (radius * (cos((end)*(CGFloat.pi/180)))), y: (radius * (sin((start)*(CGFloat.pi/180)))))
-            let endPoint = CGPoint(x: (radius * (cos((start)*(CGFloat.pi/180)))), y: (radius * (sin((end)*(CGFloat.pi/180)))))
-            
             let line = UIBezierPath()
             line.move(to: center)
-            line.addLine(to: startPoint)
+            line.addLine(to: CGPoint(x: (radius * (cos((end)*(CGFloat.pi/180)))), y: (radius * (sin((start)*(CGFloat.pi/180))))))
             strokeColor?.setStroke()
             line.lineWidth = strokeWidth ?? 0
             line.stroke()
             
             let line2 = UIBezierPath()
             line2.move(to: center)
-            line2.addLine(to: endPoint)
+            line2.addLine(to: CGPoint(x: (radius * (cos((start)*(CGFloat.pi/180)))), y: (radius * (sin((end)*(CGFloat.pi/180))))))
             strokeColor?.setStroke()
             line2.lineWidth = strokeWidth ?? 0
             line2.stroke()

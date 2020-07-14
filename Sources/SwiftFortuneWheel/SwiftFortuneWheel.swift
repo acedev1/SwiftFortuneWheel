@@ -6,11 +6,7 @@
 // 
 //
 
-#if os(macOS)
-    import AppKit
-#else
-    import UIKit
-#endif
+import UIKit
 
 @IBDesignable
 /// Customizable Fortune spinning wheel control written in Swift.
@@ -29,7 +25,7 @@ public class SwiftFortuneWheel: UIControl {
     private var spinButton: SpinButton?
 
     /// Animator
-    lazy private var animator: SpinningWheelAnimator = SpinningWheelAnimator(withObjectToAnimate: self)
+    lazy private var animator:SpinningWheelAnimator = SpinningWheelAnimator(withObjectToAnimate: self)
 
     /// Customizable configuration.
     /// Required in order to draw properly.
@@ -71,11 +67,7 @@ public class SwiftFortuneWheel: UIControl {
     /// Spin button title
     private var _spinTitle: String? {
         didSet {
-            #if os(macOS)
-            self.spinButton?.setTitle(self.spinTitle, attributes: configuration?.spinButtonPreferences?.textAttributes)
-            #else
-            self.spinButton?.setTitle(self.spinTitle, for: .normal)
-            #endif
+            spinButton?.setTitle(_spinTitle, for: .normal)
         }
     }
 
@@ -93,26 +85,6 @@ public class SwiftFortuneWheel: UIControl {
         setupPinImageView()
         setupSpinButton()
     }
-    
-    public override var wantsDefaultClipping: Bool {
-        return false
-    }
-    
-    #if os(tvOS)
-    public override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
-        guard spinButton != nil else {
-            super.pressesEnded(presses, with: event)
-            return
-        }
-        for item in presses {
-            if item.type == .select {
-                onSpinButtonTap?()
-            } else {
-                super.pressesEnded(presses, with: event)
-            }
-        }
-    }
-    #endif
 
     /// Adds pin image view to superview.
     /// Updates its layouts and image if needed.
@@ -147,21 +119,12 @@ public class SwiftFortuneWheel: UIControl {
         }
         spinButton?.setupAutoLayout(with: spinButtonPreferences)
         DispatchQueue.main.async {
-            #if os(macOS)
-            self.spinButton?.setTitle(self.spinTitle, attributes: spinButtonPreferences.textAttributes)
-            #else
             self.spinButton?.setTitle(self.spinTitle, for: .normal)
-            #endif
             self.spinButton?.image(name: self._spinButtonImageName)
             self.spinButton?.backgroundImage(name: self._spinButtonBackgroundImageName)
         }
         spinButton?.configure(with: spinButtonPreferences)
-        #if os(macOS)
-        spinButton?.target = self
-        spinButton?.action = #selector(spinAction)
-        #else
         spinButton?.addTarget(self, action: #selector(spinAction), for: .touchUpInside)
-        #endif
     }
 
     @objc
@@ -177,15 +140,10 @@ public class SwiftFortuneWheel: UIControl {
         wheelView.setupAutoLayout()
     }
 
-    #if os(macOS)
-    public override func layout() {
-        super.layout()
-    }
-    #else
     override public func layoutSubviews() {
         super.layoutSubviews()
+        self.layer.needsDisplayOnBoundsChange = true
     }
-    #endif
 
     public required init?(coder aDecoder: NSCoder) {
         self.wheelView = WheelView(coder: aDecoder)
@@ -208,14 +166,11 @@ extension SwiftFortuneWheel: SliceCalculating {}
 
 extension SwiftFortuneWheel: SpinningAnimatorProtocol {
 
-        //// Animation conformance
-        internal var layerToAnimate: SpinningAnimatable? {
-            let layer = self.wheelView?.wheelLayer
-    //        layer?.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-    //        layer?.position = CGPoint(x: self.frame.origin.x + self.frame.size.width/2, y: self.frame.origin.y + self.frame.size.height/2)
-    self.wheelView?.setAnchorPoint(anchorPoint: CGPoint(x: 0.5, y: 0.5))
-            return layer
-        }
+    //// Animation conformance
+    internal var layerToAnimate: SpinningAnimatable? {
+        return self.wheelView?.wheelLayer
+    }
+    
     
     /// Rotates to the specified index
     /// - Parameters:
@@ -298,7 +253,6 @@ extension SwiftFortuneWheel: SpinningAnimatorProtocol {
 
     /// Starts indefinite rotation animation
     open func startAnimating() {
-        self.stopAnimating()
         self.animator.addIndefiniteRotationAnimation()
     }
 
@@ -345,13 +299,11 @@ public extension SwiftFortuneWheel {
         get { return _spinButtonImageName }
     }
 
-    #if !os(macOS)
     /// Spin button background image from assets catalog, sets background image to the `spinButton`
     @IBInspectable var spinBackgroundImage: String? {
         set { _spinButtonBackgroundImageName = newValue }
         get { return _spinButtonBackgroundImageName }
     }
-    #endif
 
     /// Spin button title text, sets title text to the `spinButton`
     @IBInspectable var spinTitle: String? {

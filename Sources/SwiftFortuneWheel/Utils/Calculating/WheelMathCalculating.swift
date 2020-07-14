@@ -7,12 +7,7 @@
 //
 
 import Foundation
-
-#if os(macOS)
-    import AppKit
-#else
-    import UIKit
-#endif
+import UIKit
 
 /// Wheel other math calculation protocol
 protocol WheelMathCalculating: class {

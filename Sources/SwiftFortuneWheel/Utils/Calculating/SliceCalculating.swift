@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import CoreGraphics
+import UIKit
 
 /// Slice calculation protocol
 protocol SliceCalculating {
