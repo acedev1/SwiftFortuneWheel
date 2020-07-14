@@ -1,9 +1,5 @@
 ## CHANGELOG
 
-### 1.0.2
-
-- Fixed memory leak when re-drawing the wheel;
-
 ### 1.0.1
 
 - Fixed layout warnings;
