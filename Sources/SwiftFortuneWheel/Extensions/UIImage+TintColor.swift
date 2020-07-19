@@ -6,45 +6,13 @@
 //
 
 import Foundation
-
-#if os(macOS)
-import AppKit
-#else
 import UIKit
-#endif
 
-extension SFWImage {
+extension UIImage {
     /// Tint the image with color
     /// - Parameter color: Color
     /// - Returns: Tinted image
-    func withTintColor(_ tintColor: SFWColor) -> SFWImage {
-        var image: SFWImage = self
-        
-        #if os(tvOS)
-        if #available(tvOSApplicationExtension 13.0, *) {
-            image = self.withTintColor(tintColor, renderingMode: .alwaysTemplate)
-        } else {
-            // Fallback on earlier versions
-            image = self.withColor(tintColor)
-        }
-        #elseif os(macOS)
-        image = self.withColor(tintColor)
-        #else
-        if #available(iOS 13.0, *) {
-            image = self.withTintColor(tintColor, renderingMode: .alwaysTemplate)
-        } else {
-            // Fallback on earlier versions
-            image = self.withColor(tintColor)
-        }
-        #endif
-        
-        return image
-    }
-    
-    private func withColor(_ color: SFWColor) -> SFWImage {
-        #if os(macOS)
-        return self.tint(color: color)
-        #else
+    func withColor(_ color: UIColor) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(size, false, scale)
         guard let ctx = UIGraphicsGetCurrentContext(), let cgImage = cgImage else { return self }
         color.setFill()
@@ -55,6 +23,5 @@ extension SFWImage {
         guard let colored = UIGraphicsGetImageFromCurrentImageContext() else { return self }
         UIGraphicsEndImageContext()
         return colored
-        #endif
     }
 }

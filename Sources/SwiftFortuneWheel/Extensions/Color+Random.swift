@@ -7,17 +7,12 @@
 //
 
 import Foundation
-
-#if os(macOS)
-import AppKit
-#else
 import UIKit
-#endif
 
-extension SFWColor {
+extension UIColor {
     /// Random color
-    static var random: SFWColor {
-        return SFWColor(red: .random(in: 0...1),
+    static var random: UIColor {
+        return UIColor(red: .random(in: 0...1),
                        green: .random(in: 0...1),
                        blue: .random(in: 0...1),
                        alpha: 1.0)
