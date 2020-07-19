@@ -13,6 +13,14 @@
 - Fixed image `flipUpsideDown` from not working;
 - See migration process here: [**from 1.0.x to 1.x.x**](Migrations/Migration_1_to_1.x.md);
 
+### 1.0.3
+
+- When you using `startAnimating` method to start indefinite rotation animation, it’s possible now change optional `rotationTime` and `fullRotationCountInRotationTime` parameters to change the rotation speed;
+
+### 1.0.2
+
+- Fixed memory leak when re-drawing the wheel;
+
 ### 1.0.1
 
 - Fixed layout warnings;
