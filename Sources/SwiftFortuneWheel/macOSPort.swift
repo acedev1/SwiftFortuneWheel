@@ -14,7 +14,6 @@ typealias UIImageView = NSImageView
 typealias UIButton = NSButton
 typealias UIBezierPath = NSBezierPath
 typealias UIScreen = NSScreen
-typealias UITapGestureRecognizer = NSClickGestureRecognizer
 #endif
 
 #if os(macOS)
